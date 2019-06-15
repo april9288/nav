@@ -14,7 +14,7 @@ module.exports = {
     const { query } = req.params
 
     helper.getSearchResults(query)
-      .limit(5)
+      .limit(1)
       .then(data => res.status(200).send(data))
       .catch(err => res.status(404).send(err))
   }

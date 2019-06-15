@@ -39,7 +39,7 @@ class NavBar extends React.Component {
 
   retrieveData() {
     axios
-      .get('/navbar/navs')
+      .get('/pg/navbar/navs')
       .then(({ data }) => this.setState({ departments: data }))
       .catch(err => console.log(err))
   }
@@ -75,7 +75,7 @@ class NavBar extends React.Component {
     if (e.target.value) {
       this.setState({ search: e.target.value }, () =>
         axios
-          .get(`/navbar/search/${this.state.search}`)
+          .get(`/pg/navbar/search`)
           .then(({ data }) => this.setState({ results: data }))
           .catch(err => console.log(err)))
     } else {
@@ -171,29 +171,45 @@ class NavBar extends React.Component {
               </ul>
 
               {/* additional assets i.e. images render */}
-              {
-                this.state.results.length ?
-                <div>
-                  <div className={style.featuredResult}>
-                    <span>
-                      <strong>Featured results for "{this.state.results[this.state.resultHoverIdx].keyword}"</strong>
-                    </span>
-                  </div>
-                  <div className={style.imgResultDiv}>
-                    <ul>
-                      {
-                        this.state.results[this.state.resultHoverIdx].products.map((product, index) =>
-                        <li key={index} onMouseEnter={() => this.handleMouseOver(index)} onMouseOut={() => this.handleMouseOut(index)}>
-                          {
-                            (this.state[index] && product.images.length > 1) ? <img className={style.imgResult} src={product.images[1].imageUrl} /> 
-                            : <img className={style.imgResult} src={product.images[0].imageUrl} />
-                          }
-                        </li>)
-                      }
-                    </ul>
-                  </div>
-                </div> : ''
-              }
+
+                    {
+                      this.state.results.length 
+                      ?
+                        <div>
+                              <div className={style.featuredResult}>
+                                  <span>
+                                    <strong>Featured results for "{this.state.results[0].keyword}"</strong>
+                                  </span>
+                              </div>
+                            <div className={style.imgResultDiv}>
+                                  <ul>
+                                    {
+
+                                      <li onMouseEnter={() => this.handleMouseOver(1)} onMouseOut={() => this.handleMouseOut(1)}>
+                                          <img className={style.imgResult} src={this.state.results[0].image1[0]} />
+                                          <img className={style.imgResult} src={this.state.results[0].image1[1]} />
+                                          <img className={style.imgResult} src={this.state.results[0].image1[2]} />
+                                      </li>
+                                      // this.state.results.map((product, index) =>
+
+                                      // <li key={index} onMouseEnter={() => this.handleMouseOver(index)} onMouseOut={() => this.handleMouseOut(index)}>
+                                        
+                                      //   {
+                                      //     (this.state[index] && product.images.length > 1) ? <img className={style.imgResult} src={product.images[1].imageUrl} /> 
+                                      //     : <img className={style.imgResult} src={product.images[0].imageUrl} />
+                                        
+                                      //   }
+                                      // </li>
+                                      // )
+                                    }
+                                  </ul>
+                            </div>
+                        </div> 
+                      : ''
+                    }
+
+
+
             </div> : ''
         }
 

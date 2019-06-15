@@ -1,21 +1,20 @@
 const path = require('path');
-const SRC_DIR = path.join(__dirname, '/client/src');
-const DIST_DIR = path.join(__dirname, '/client/dist');
+const BrotliPlugin = require('brotli-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
+
 const combinedLoaders = require('webpack-combine-loaders')
 
 module.exports = {
-  mode: 'development',
-  entry: `${SRC_DIR}/index.jsx`,
+  entry: path.resolve(__dirname, "./client/src"),
   output: {
     filename: 'bundle.js',
-    path: DIST_DIR,
+    path: path.resolve(__dirname, "./client/dist"),
   },
   module: {
     rules: [
       {
         loader: 'babel-loader',
         test: /\.js[x]/,
-        include: SRC_DIR,
         exclude: /node_modules/,
         options: {
           presets: ['@babel/preset-env', '@babel/preset-react'],
@@ -49,5 +48,20 @@ module.exports = {
   },
   resolve: {
     extensions: ['.js', '.jsx']
-  }
+  },
+  plugins: [
+    new CompressionPlugin({
+    filename: '[path].gz[query]',
+    algorithm: 'gzip',
+    test: /\.(js|css|html|svg)$/,
+    threshold: 8192,
+    minRatio: 0.8
+    }),
+    new BrotliPlugin({
+      asset: '[path].br[query]',
+      test: /\.(js|css|html|svg)$/,
+      threshold: 10240,
+      minRatio: 0.8
+    })
+  ]
 };
